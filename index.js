@@ -1,16 +1,6 @@
 const db = require('./db.js');
 const inquirer = require('inquirer');
 
-module.exports.add = async (task) => {
-  const taskList = await db.read();
-  taskList.push({ title: task, done: false });
-  await db.write(taskList);
-};
-
-module.exports.clear = async () => {
-  await db.write([]);
-};
-
 const createOrUpdateTask = (taskList, index, isCreate = true) => {
   inquirer
     .prompt({
@@ -79,13 +69,13 @@ const printTasks = (taskList) => {
     .prompt({
       type: 'list',
       name: 'index',
-      message: '请选择你要操作的任务?',
+      message: '请选择你要进行的操作?',
       choices: [
         { name: '退出', value: '-3' },
         { name: '+ 创建任务', value: '-2' },
-        { name: '+ 清空任务', value: '-1' },
+        { name: '- 清空任务', value: '-1' },
         ...taskList.map((task, index) => ({
-          name: `${index + 1} - ${task.title}`,
+          name: `${task.done ? '[x]' : '[_]'} ${index + 1} - ${task.title}`,
           value: `${index}`
         }))
       ]
@@ -122,7 +112,23 @@ const printTasks = (taskList) => {
     });
 };
 
-module.exports.showAll = async () => {
+const add = async (task) => {
+  const taskList = await db.read();
+  taskList.push({ title: task, done: false });
+  await db.write(taskList);
+};
+
+const clear = async () => {
+  await db.write([]);
+};
+
+const showAll = async () => {
   const taskList = await db.read();
   printTasks(taskList);
+};
+
+module.exports = {
+  add,
+  clear,
+  showAll
 };
