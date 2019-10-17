@@ -6,6 +6,9 @@
   "files": [
     "*.js"
   ],
+  "script": {
+    "test": "jest"
+  },
   "description": "A simple node todo application",
   "version": "0.0.2",
   "main": "index.js",
@@ -13,5 +16,9 @@
   "dependencies": {
     "commander": "^3.0.2",
     "inquirer": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "jest": "^24.9.0"
   }
 }
